@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0,btnstar,btnhas,call;
     private ImageButton clear;
     private EditText screen;
+    private static final int PERMISSIONS_REQUEST = 1;
 
 
     @Override
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         allfind();
+        parmition_Alow();
         allOnclick();
     }
 
@@ -74,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (v.getId()) {
             case R.id.btnZiro:
-                String btnziro = btn0.getText().toString().trim();
                 display("0");
                 break;
             case R.id.btnOne:
@@ -110,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnHas:
                 display("#");
                 break;
-
             case R.id.imgbtnClear:
                 clear();
                 break;
@@ -127,31 +128,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String mobileNumber = screen.getText().toString().trim();
             Intent intent = new Intent(Intent.ACTION_CALL);
             intent.setData(Uri.parse("tel:"+mobileNumber));
-
-
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-
-                Toast.makeText(this, "Please your phn permission on", Toast.LENGTH_LONG).show();
                 return;
             }
             startActivity(intent);
-
-
-
-
         }
     }
 
     private void clear() {
-
         int screenlength = screen.getText().toString().length();
         if (screenlength >0) {
             String newscreen = screen.getText().toString().substring(0,screenlength-1);
             screen.setText(newscreen);
         }
     }
+    private void  parmition_Alow(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.CALL_PHONE)){
+                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CALL_PHONE},PERMISSIONS_REQUEST);
+            }else{
+                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CALL_PHONE},PERMISSIONS_REQUEST);
+            }
+        }
 
-
+    }
 
     private void display(String val) {
         screen.append(val);
