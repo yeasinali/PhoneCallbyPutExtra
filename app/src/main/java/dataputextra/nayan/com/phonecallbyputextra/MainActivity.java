@@ -127,7 +127,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             String mobileNumber = screen.getText().toString().trim();
             Intent intent = new Intent(Intent.ACTION_CALL);
-            intent.setData(Uri.parse("tel:"+mobileNumber));
+
+            intent.setData(Uri.parse("tel:"+Uri.encode(mobileNumber)));
+
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
